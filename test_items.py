@@ -10,13 +10,13 @@ def book_grabber():
         'http://selenium1py.pythonanywhere.com/catalogue/category/books/non-fiction/hacking_7/?page=1',
         'http://selenium1py.pythonanywhere.com/catalogue/category/books/non-fiction/hacking_7/?page=2'
     ]
-    shema = 'http://selenium1py.pythonanywhere.com'
+    shema = 'http://selenium1py.pythonanywhere.com/'
     book_list = []
     for page in page_list:
         response = requests.get(page)
         response.encoding = 'utf-8'
         soup = BeautifulSoup(response.text, 'lxml')
-        bufer_book_list = [shema + book_link.find('a')['href'].replace('/ru/', '/').replace('/en-gb/', '/') for
+        bufer_book_list = [shema + '/'.join(book_link.find('a')['href'].split('/')[2:]) for
                            book_link in soup.find('section').find_all('h3')]
         book_list += bufer_book_list
     return book_list

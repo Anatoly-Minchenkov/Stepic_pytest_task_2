@@ -4,25 +4,20 @@ from selenium.webdriver.chrome.options import Options
 
 def pytest_addoption(parser):
     parser.addoption('--language', action='store', default=None,
-                     help="Choose laguage: ru or en")
+                     help="Choose your language")
 
 
 @pytest.fixture(scope="module")
 def browser(request):
     browser_name = request.config.getoption("language")
     browser = None
-    if browser_name == "ru":
+    if browser_name:
         print("\nstart ru-version of site..")
         options = Options()
-        options.add_experimental_option('prefs', {'intl.accept_languages': 'ru, en'})
-        browser = webdriver.Chrome(options=options)
-    elif browser_name == "en":
-        print("\nstart en-version of site..")
-        options = Options()
-        options.add_experimental_option('prefs', {'intl.accept_languages': 'en, ru'})
+        options.add_experimental_option('prefs', {'intl.accept_languages': f'{browser_name}, en'})
         browser = webdriver.Chrome(options=options)
     else:
-        raise pytest.UsageError("--language should be ru or en")
+        raise pytest.UsageError("--language should be ru/en or something different")
 
     yield browser
     print("\nquit browser..")
